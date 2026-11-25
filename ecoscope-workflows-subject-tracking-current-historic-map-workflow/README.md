@@ -5,8 +5,8 @@
 
 ```yaml
 # fingerprint:
-artifacts_sha256_basic: 4ee4d4ec979881193da88297cbf7971b5139b1927f86bda00d04a7337d56d3bf
-artifacts_sha256_strict: 089a97b4127fb2dfd63e036b9867d06c2743ec1db692d29c09b6d5b27b8b19da
+artifacts_sha256_basic: 99c07568463eff666e116cd6e9e4aa55ca3363c2a8c64dc46a15aaa283192a3c
+artifacts_sha256_strict: 5f1cac45b51e5e0d077f5005a9becc28c5dc7deae587e45f8a778ecf8e6aef63
 installed_requirements:
 - channel: https://repo.prefix.dev/ecoscope-workflows/
   name: ecoscope-platform
@@ -21,10 +21,10 @@ installed_requirements:
   name: pydeck
   version: {version: ==0.9.2}
 params_sha256: 92b6d6bd50c18b1f6a7e1a36e1fa0b89d411f70cd38cb72e2253ee47746b2ada
-spec_sha256: 4c9183f533c02689a626d70642f9ddeb503e811a822790327c00d6eacd5dfd5f
+spec_sha256: b8bee5e4a9e25539ce660d868a5edb6050df24a677e5205f9538a6f5b9535e33
 
 ```
 
-# ecoscope-workflows-subject-historic-current-comparison-workflow
+# ecoscope-workflows-subject-tracking-current-historic-map-workflow
 
 ![](graph.png)
