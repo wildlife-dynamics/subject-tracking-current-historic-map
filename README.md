@@ -4,7 +4,7 @@ Maps each subject in an EarthRanger subject group with its tracks from the chose
 
 ![Historic and current tracks map (Sample EarthRanger data)](resources/thumbnail.png)
 
-*One lion's map from a run against the Sample EarthRanger (made-up data), grouped by subject name: the current two weeks in the subject's colour over the two weeks before in grey.*
+*Salif Keita, a bull elephant in Mali's Gourma, from a run against the Sample EarthRanger, which replays his published track: one month in blue over the month before in grey.*
 
 ## What it does
 
@@ -196,9 +196,10 @@ pixi run --manifest-path pixi.toml -e default bash dev/pytest-cli.sh subject_tra
 
 Results land in `/tmp/workflow-test-results/subject_tracking_current_historic_map/<case>/`.
 
-The thumbnail (`resources/thumbnail.png`) comes from a live run against the local Sample EarthRanger
-(made-up data): Lions, 15–28 June 2025, the same length before as the historic period, grouped by subject
-name. The Sample EarthRanger's lions are at two sites far apart, so the all-subjects map is too zoomed out
-to read.
+The thumbnail (`resources/thumbnail.png`) comes from a live run against the local Sample EarthRanger:
+the **Gourma Elephants** group, November 2025, the same length before as the historic period, one map,
+"Use subject colors for current tracks" unticked. That group is not made up: the Sample EarthRanger
+replays the published track of Salif Keita, a bull elephant collared by Save the Elephants in Mali
+(Wall et al. 2014), moved forward to current dates.
 
 Documentation: [docs/index.html](docs/index.html).
