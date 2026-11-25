@@ -1,5 +1,5 @@
 designer-run:
-  name: subject-historic-current-comparison
+  name: subject-tracking-current-historic-map
   description: The values used with ▶ Run in the designer.
   mock_io: true
   params:
@@ -25,7 +25,7 @@ designer-run:
     sort_values_by_status:
       ascending: true
 
-# Every case runs with mock IO, so CI needs no data-source secrets: the io-tagged
+# These cases run with mock IO, so CI needs no data-source secrets: the io-tagged
 # get_subjectgroup_observations returns the platform's packaged example fixture for
 # both the current and the historic fetch (the mock ignores time_range and the
 # connection), so these exercise the whole pipeline but not the two periods differing.
@@ -104,3 +104,36 @@ single-current-color:
       default_current_hex: '#d62728'
     sort_values_by_status:
       ascending: false
+
+# Live run against the Sample EarthRanger on this computer (http://127.0.0.1:8797), so the two
+# periods really differ. local_only: CI skips it, because that server only exists locally.
+sample-er:
+  name: Sample EarthRanger
+  description: >-
+    Live run against the local Sample EarthRanger (Africa scenario): the Kruger Collars group
+    (elephant, buffalo, leopard) for the last two weeks of June 2025 over the two weeks before,
+    one map for all subjects, form defaults.
+  mock_io: false
+  local_only: true
+  params:
+    workflow_details:
+      name: Historic and Current Tracks, Kruger
+    groupers:
+      groupers: []
+    er_connection:
+      data_source:
+        name: Sample EarthRanger
+    time_range:
+      since: '2025-06-15T00:00:00'
+      until: '2025-06-28T23:59:59'
+    subject_group_name:
+      var: Kruger Collars
+    previous_time_range:
+      offset:
+        preset: Same as current period
+    status_color_columns:
+      previous_color_hex: '#a9a9a9'
+      use_hex_column_for_current: true
+      default_current_hex: '#6495ed'
+    sort_values_by_status:
+      ascending: true

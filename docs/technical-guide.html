@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Technical Guide · subject-historic-current-comparison</title>
+  <title>Technical Guide · subject-tracking-current-historic-map</title>
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
   <header class="site-header">
     <div class="bar">
-      <a class="brand" href="index.html">subject-historic-current-comparison</a>
+      <a class="brand" href="index.html">subject-tracking-current-historic-map</a>
       <nav>
         <a href="index.html">Overview</a>
         <a href="user-guide.html">User Guide</a>
@@ -21,7 +21,7 @@
 
   <main>
     <h1>Technical Guide</h1>
-    <p class="lede">The steps subject-historic-current-comparison runs, the packages they come from, and how to recompile and test it.</p>
+    <p class="lede">The steps subject-tracking-current-historic-map runs, the packages they come from, and how to recompile and test it.</p>
 
     <h2>Steps</h2>
     <p>In the order they run. Each step is a task from one of the packages below.</p>
@@ -51,17 +51,17 @@
     <p>Both periods are joined into tracks with the <strong>Trajectory Segment Filter</strong> settings from the form: <strong>Previous Relocations to Trajectories</strong> takes <code>${{ workflow.segment_filter.return }}</code>, like <strong>Current Relocations to Trajectories</strong>. Defaults: 0.001&ndash;5000&nbsp;m, 1&ndash;21600&nbsp;s and 0.01&ndash;9.0&nbsp;km/h per segment.</p>
 
     <h2>Recompiling</h2>
-    <p><code>spec.yaml</code> is the source; <code>ecoscope-workflows-subject-historic-current-comparison-workflow/</code> is generated from it by wt-compiler. Recompile after changing the overrides or the open settings: the form schema is part of the generated package.</p>
+    <p><code>spec.yaml</code> is the source; <code>ecoscope-workflows-subject-tracking-current-historic-map-workflow/</code> is generated from it by wt-compiler. Recompile after changing the overrides or the open settings: the form schema is part of the generated package.</p>
     <pre><code>./dev/recompile.sh --update   # keeps the lock file and bumps VERSION.yaml
 ./dev/recompile.sh --install  # a new lock file, and the packages installed</code></pre>
 
     <h2>Testing</h2>
     <p>Each case in <code>test-cases.yaml</code> runs the workflow with its settings:</p>
-    <pre><code>pixi run --manifest-path pixi.toml -e default bash dev/pytest-cli.sh subject_historic_current_comparison --all</code></pre>
+    <pre><code>pixi run --manifest-path pixi.toml -e default bash dev/pytest-cli.sh subject_tracking_current_historic_map --all</code></pre>
   </main>
 
   <footer class="site-footer">
-    <p>subject-historic-current-comparison &middot; Wildlife Dynamics</p>
+    <p>subject-tracking-current-historic-map &middot; Wildlife Dynamics</p>
   </footer>
 </body>
 </html>

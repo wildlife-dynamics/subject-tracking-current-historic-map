@@ -34,8 +34,8 @@ metadata:
       indicators:
         - name: Subject movement
   license: BSD-3-Clause
-  repository: https://github.com/wildlife-dynamics/subject-historic-current-tracks-map
-  documentation: https://github.com/wildlife-dynamics/subject-historic-current-tracks-map#readme
+  repository: https://github.com/wildlife-dynamics/subject-tracking-current-historic-map
+  documentation: https://github.com/wildlife-dynamics/subject-tracking-current-historic-map#readme
   readme: README.md
   keywords: [movement, tracks, trajectories, comparison, historic, subjects, earthranger]
   thumbnail: resources/thumbnail.png

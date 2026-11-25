@@ -1,4 +1,4 @@
-# subject-historic-current-comparison
+# subject-tracking-current-historic-map
 
 Maps each subject in an EarthRanger subject group with its tracks from the chosen time range on top of its tracks from a historic period just before it. Current tracks are drawn on top of historic tracks by default; a checkbox on the form swaps that. By default they're in the subject's EarthRanger colour and the historic tracks are grey; both colours can be changed on the form. By default all subjects share one map; group by subject name to get one map per subject.
 
@@ -57,7 +57,7 @@ Maps each subject in an EarthRanger subject group with its tracks from the chose
 ## 1. Load the Workflow
 
 In the workflow runner, add a new template using this repository's URL. Once added, select
-**subject-historic-current-comparison** from the available templates list to load it.
+**subject-tracking-current-historic-map** from the available templates list to load it.
 
 ---
 
@@ -176,23 +176,25 @@ The run form is set in `spec.yaml`:
 
 ### Testing
 
-Every case in `test-cases.yaml` runs with mock IO, so CI needs no data-source secrets: the io-tagged
-`get_subjectgroup_observations` returns the platform's packaged example fixture for both the current
-and the historic fetch. The mock ignores the time range and the connection, so the historic and current
-tracks are the same in these runs.
+The first three cases in `test-cases.yaml` run with mock IO, so CI needs no data-source secrets: the
+io-tagged `get_subjectgroup_observations` returns the platform's packaged example fixture for both the
+current and the historic fetch. The mock ignores the time range and the connection, so the historic and
+current tracks are the same in these runs. `sample-er` is a live run against the Sample EarthRanger on
+your computer; it is marked `local_only: true`, so CI skips it.
 
 | Case | What it covers |
 |---|---|
 | `designer-run` | the values used with ▶ Run in the designer: Lions, form defaults, one map for all subjects |
 | `base` | every field at its form default, so one map for all subjects |
-| `single-current-color` | one picked colour for all current tracks, a non-default historic colour, *3 months back*, grouped by subject name |
+| `single-current-color` | one picked colour for all current tracks, a non-default historic colour, *3 months back*, grouped by subject name, historic tracks on top |
+| `sample-er` | live, local only: Kruger Collars on the Sample EarthRanger, form defaults, two periods that really differ |
 
 ```bash
 # run every case, as CI does
-pixi run --manifest-path pixi.toml -e default bash dev/pytest-cli.sh subject_historic_current_comparison --all --skip-setup
+pixi run --manifest-path pixi.toml -e default bash dev/pytest-cli.sh subject_tracking_current_historic_map --all --skip-setup
 ```
 
-Results land in `/tmp/workflow-test-results/subject_historic_current_comparison/<case>/`.
+Results land in `/tmp/workflow-test-results/subject_tracking_current_historic_map/<case>/`.
 
 The thumbnail (`resources/thumbnail.png`) comes from a live run against the local Sample EarthRanger
 (made-up data): Lions, 15–28 June 2025, the same length before as the historic period, grouped by subject

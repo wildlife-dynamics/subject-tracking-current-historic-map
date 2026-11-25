@@ -1,5 +1,5 @@
 #!/bin/bash
-# Recompile spec.yaml into ecoscope-workflows-subject-historic-current-comparison-workflow/.
+# Recompile spec.yaml into ecoscope-workflows-subject-tracking-current-historic-map-workflow/.
 #   ./dev/recompile.sh --install   the first time: a new lock file, and the packages installed
 #   ./dev/recompile.sh --update    after that: keeps the lock file and bumps VERSION.yaml
 
