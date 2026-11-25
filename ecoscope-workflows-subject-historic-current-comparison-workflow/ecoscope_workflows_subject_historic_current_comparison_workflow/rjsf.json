@@ -129,9 +129,9 @@
             ],
             "title": "Group by"
           },
-          "title": "Group by",
+          "title": " ",
           "type": "array",
-          "description": "Add a Subject Name entry to split the dashboard into one map per subject. Leave it empty to show all subjects on a single map."
+          "description": "Specify how the data should be grouped to create the views for your dashboard. This field is optional; if left blank, all the data will appear in a single view."
         }
       },
       "type": "object",
@@ -408,7 +408,7 @@
       ],
       "type": "object",
       "title": "Comparison Period",
-      "description": "The earlier period whose tracks are drawn as historic tracks, under the current tracks (grey by default). It always ends where the current time range starts."
+      "description": "The earlier period whose tracks are drawn as historic tracks (grey and under the current tracks by default). It always ends where the current time range starts."
     },
     "status_color_columns": {
       "additionalProperties": false,
@@ -439,6 +439,20 @@
       ],
       "type": "object",
       "title": "Track Colors"
+    },
+    "sort_values_by_status": {
+      "additionalProperties": false,
+      "properties": {
+        "ascending": {
+          "title": "Current tracks on top",
+          "type": "boolean",
+          "default": true,
+          "description": "Draw current tracks over historic tracks where they overlap. Untick to draw historic tracks on top."
+        }
+      },
+      "required": [],
+      "type": "object",
+      "title": "Track Layering"
     }
   },
   "$defs": {
@@ -682,7 +696,8 @@
       "segment_filter",
       "base_maps_pydeck",
       "previous_time_range",
-      "status_color_columns"
+      "status_color_columns",
+      "sort_values_by_status"
     ]
   },
   "additionalProperties": false

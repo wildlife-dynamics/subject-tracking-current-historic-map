@@ -87,7 +87,7 @@ rjsf-overrides:
           depends_on: properties.er_connection.properties.data_source.properties.name
 
     # Comparison period: defaults to a period as long as the current one, ending where it starts
-    previous_time_range.description: "The earlier period whose tracks are drawn as historic tracks, under the current tracks (grey by default). It always ends where the current time range starts."
+    previous_time_range.description: "The earlier period whose tracks are drawn as historic tracks (grey and under the current tracks by default). It always ends where the current time range starts."
     previous_time_range.properties.offset.title: Comparison Period Length
     previous_time_range.properties.offset.description: "How far back the comparison period starts: a preset (e.g. the same length as the current period), a custom offset, or a start date picked on the calendar."
     previous_time_range.properties.offset.default:
@@ -111,6 +111,13 @@ rjsf-overrides:
       format: color
       default: '#6495ed'
       description: Colour of the current tracks when "Use subject colors for current tracks" is unticked.
+
+    # Track Layering: which tracks draw on top where they overlap
+    sort_values_by_status.properties.ascending:
+      title: Current tracks on top
+      type: boolean
+      default: true
+      description: Draw current tracks over historic tracks where they overlap. Untick to draw historic tracks on top.
 
   $defs:
     PresetPreviousPeriod.properties.preset.default: Same as current period
@@ -354,6 +361,23 @@ workflow:
     column_name: duration_status
     default_value: Historic Tracks
 
+# layer_order drives the Track Layering sort: historic rows get 1, current rows 2.
+- name: Previous Layer Order
+  id: previous_layer_order
+  task: add_new_column
+  partial:
+    df: ${{ workflow.previous_duration_status.return }}
+    column_name: layer_order
+    default_value: '1'
+
+- name: Current Layer Order
+  id: current_layer_order
+  task: add_new_column
+  partial:
+    df: ${{ workflow.current_duration_status.return }}
+    column_name: layer_order
+    default_value: '2'
+
 - name: Concatenate Current and Previous Dataframes
   id: dataframes
   task: concatenate_dataframes
@@ -362,8 +386,8 @@ workflow:
       - never
   partial:
     list_df:
-    - ${{ workflow.previous_duration_status.return }}
-    - ${{ workflow.current_duration_status.return }}
+    - ${{ workflow.previous_layer_order.return }}
+    - ${{ workflow.current_layer_order.return }}
     axis: 0
     join: outer
     ignore_index: true
@@ -405,15 +429,16 @@ workflow:
     - df
     argvalues: ${{ workflow.groups.return }}
 
-# Current tracks always draw on top of historic tracks; this isn't on the form.
-# Rows draw in order, so the label sorted last ends up on top. "Current Tracks" sorts
-# before "Historic Tracks", so descending puts the current rows last, over the historic ones.
-- name: Track Order
+# Which tracks draw on top where they overlap. Rows draw in order, so the rows sorted last end
+# up on top. layer_order is 1 for historic and 2 for current tracks, so ascending puts the
+# current rows last, over the historic ones. `ascending` is the form's "Current tracks on top"
+# checkbox, and matches sort_values' own default (true), so a run that leaves it out still
+# draws current tracks on top.
+- name: Track Layering
   id: sort_values_by_status
   task: sort_values
   partial:
-    column_name: duration_status
-    ascending: false
+    column_name: layer_order
     na_position: last
   mapvalues:
     argnames:

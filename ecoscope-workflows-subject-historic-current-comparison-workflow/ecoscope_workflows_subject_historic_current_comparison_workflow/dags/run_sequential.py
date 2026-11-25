@@ -585,6 +585,50 @@ def main(params: dict[str, Any], validate_params_schema: bool = True):
         .call()
     )
 
+    previous_layer_order = (
+        task(add_new_column)
+        .validate()
+        .set_task_instance_id("previous_layer_order")
+        .handle_errors()
+        .with_tracing()
+        .skipif(
+            conditions=[
+                any_is_empty_df,
+                any_dependency_skipped,
+            ],
+            unpack_depth=1,
+        )
+        .partial(
+            df=previous_duration_status,
+            column_name="layer_order",
+            default_value="1",
+            **(params.get("previous_layer_order") or {}),
+        )
+        .call()
+    )
+
+    current_layer_order = (
+        task(add_new_column)
+        .validate()
+        .set_task_instance_id("current_layer_order")
+        .handle_errors()
+        .with_tracing()
+        .skipif(
+            conditions=[
+                any_is_empty_df,
+                any_dependency_skipped,
+            ],
+            unpack_depth=1,
+        )
+        .partial(
+            df=current_duration_status,
+            column_name="layer_order",
+            default_value="2",
+            **(params.get("current_layer_order") or {}),
+        )
+        .call()
+    )
+
     dataframes = (
         task(concatenate_dataframes)
         .validate()
@@ -598,7 +642,7 @@ def main(params: dict[str, Any], validate_params_schema: bool = True):
             unpack_depth=1,
         )
         .partial(
-            list_df=[previous_duration_status, current_duration_status],
+            list_df=[previous_layer_order, current_layer_order],
             axis=0,
             join="outer",
             ignore_index=True,
@@ -690,8 +734,7 @@ def main(params: dict[str, Any], validate_params_schema: bool = True):
             unpack_depth=1,
         )
         .partial(
-            column_name="duration_status",
-            ascending=False,
+            column_name="layer_order",
             na_position="last",
             **(params.get("sort_values_by_status") or {}),
         )

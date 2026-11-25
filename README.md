@@ -1,6 +1,6 @@
 # subject-historic-current-comparison
 
-Maps each subject in an EarthRanger subject group with its tracks from the chosen time range on top of its tracks from a historic period just before it. Current tracks are always drawn on top of historic tracks. By default they're in the subject's EarthRanger colour and the historic tracks are grey; both colours can be changed on the form. By default all subjects share one map; group by subject name to get one map per subject.
+Maps each subject in an EarthRanger subject group with its tracks from the chosen time range on top of its tracks from a historic period just before it. Current tracks are drawn on top of historic tracks by default; a checkbox on the form swaps that. By default they're in the subject's EarthRanger colour and the historic tracks are grey; both colours can be changed on the form. By default all subjects share one map; group by subject name to get one map per subject.
 
 ![Historic and current tracks map (Sample EarthRanger data)](resources/thumbnail.png)
 
@@ -32,11 +32,12 @@ Maps each subject in an EarthRanger subject group with its tracks from the chose
 | **Map Columns** | Maps and transforms the columns of a DataFrame based on the provided parameters. The order of the operations is as follows: drop columns, retain/reorder columns, and rename columns. |
 | **Persist Previous Trajectories** | Persist dataframe to a file or cloud storage object. |
 | **Previous Duration Status** | Create a new column in the DataFrame with a default value if it doesn't already exist. |
+| **Previous Layer Order**, **Current Layer Order** | Marks historic rows 1 and current rows 2 in a `layer_order` column, which Track Layering sorts on. |
 | **Concatenate Current and Previous Dataframes** | Merge multiple dataframes into a single dataframe. |
 | **Add Temporal Index** | Indexes the tracks by segment start time. |
 | **Split Groups** | One table of tracks per map: all subjects together, or one per subject. |
 | **Track Colors** | Colours the tracks: historic tracks in the Historic Tracks Color; current tracks in each subject's EarthRanger colour, or in the Current Tracks Color if that's turned off. |
-| **Track Order** | Orders the rows so current tracks are always drawn on top of historic tracks. Not on the form. |
+| **Track Layering** | Orders the rows so the chosen tracks are drawn on top where they overlap: current tracks by default, historic tracks when **Current tracks on top** is unticked. |
 | **Subset Columns** | Return a DataFrame restricted to a subset of columns. |
 | **Create Path Layer** | Creates a polyline layer definition based on the provided configuration. |
 | **Compute View State From Gdf** | Zooms each map to its subject's tracks. |
@@ -124,13 +125,17 @@ Applies to both the current and the historic tracks.
 
 ### Track Colors
 
-Current tracks are always drawn on top of historic tracks where they overlap.
-
 | Field | Description | Default |
 |---|---|---|
 | Historic Tracks Color *(required)* | Colour of the tracks from the historic period. | `#a9a9a9` (grey) |
 | Use subject colors for current tracks | Colour each subject's current tracks with its EarthRanger colour. Untick to use the Current Tracks Color for every subject. | ticked |
 | Current Tracks Color | Colour of the current tracks when **Use subject colors for current tracks** is unticked. | `#6495ed` (blue) |
+
+### Track Layering
+
+| Field | Description | Default |
+|---|---|---|
+| Current tracks on top | Draw current tracks over historic tracks where they overlap. Untick to draw historic tracks on top. | ticked |
 
 ---
 
@@ -153,11 +158,12 @@ The run form is set in `spec.yaml`:
 - `rjsf-overrides` turns the **Track Colors** fields into two colour pickers (`format: color`) and a
   checkbox, with their titles and defaults. The keys are `status_color_columns.properties.<field>`.
   `previous_color_hex` has no default in the task, so `test-cases.yaml` sets it.
-- **Track Order** isn't on the form: `ascending: false` is fixed in the spec. Rows draw in order, so the
-  label sorted last ends up on top. *Current Tracks* sorts before *Historic Tracks*, so descending puts the
-  current rows last, on top. Don't drop `ascending` from the spec: `sort_values`' own default (`true`)
-  would put the historic tracks on top. If either label in the **Current/Previous Duration Status**
-  steps changes, check this still holds.
+- **Track Layering** (`sort_values_by_status`) puts `ascending` on the form as the **Current tracks on top**
+  checkbox (`sort_values_by_status.properties.ascending`). Rows draw in order, so the rows sorted last end up
+  on top. The step sorts on `layer_order`, set to `1` for historic rows and `2` for current rows by the
+  **Previous/Current Layer Order** steps, so ascending puts the current rows last, on top. That matches
+  `sort_values`' own default (`true`), so a run that leaves the setting out still draws current tracks on
+  top. The order no longer depends on the *Current Tracks* / *Historic Tracks* labels.
 - **Trajectory Segment Filter**, **BaseMap URLs** and **Comparison Period** have no fixed values in the spec,
   so they're on the form for each run.
 - Both periods are joined into tracks with the **Trajectory Segment Filter** settings

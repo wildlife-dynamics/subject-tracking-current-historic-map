@@ -47,7 +47,7 @@
 
     <div class="error-block">
       <p class="symptom">Historic tracks cover the current tracks</p>
-      <p>Current tracks are always drawn on top; the form has no setting for it. If historic tracks still cover them, the <strong>Track Order</strong> step's fixed <code>ascending: false</code> has been changed or removed in <code>spec.yaml</code>, or the <em>Current Tracks</em> / <em>Historic Tracks</em> labels were renamed so they no longer sort current-first. Restore <code>ascending: false</code> (or flip it to match the new labels) and recompile.</p>
+      <p>Under <strong>Track Layering</strong>, <strong>Current tracks on top</strong> is unticked for that run. Tick it (the default) and run again. If it is ticked and historic tracks still cover the current ones, check in <code>spec.yaml</code> that the <strong>Previous Layer Order</strong> step still sets <code>layer_order</code> to <code>1</code> and <strong>Current Layer Order</strong> to <code>2</code>, then recompile.</p>
     </div>
 
     <div class="error-block">
