@@ -128,14 +128,14 @@ jobs:
 
       - uses: prefix-dev/setup-pixi@v0.8.1
         with:
-          pixi-version: v0.80.0
+          pixi-version: v0.84.2
 
       - name: Run all workflow test cases
         shell: bash
-        env:
-          # Each data source the test cases use, from this repo's GitHub secrets (Settings → Secrets
-          # and variables → Actions).
-          # (no data sources yet: add ECOSCOPE_WORKFLOWS__CONNECTIONS__<TYPE>__<NAME>__<FIELD> lines)
+        # No data sources yet: every CI test case runs with mock IO. To add one, give this step an
+        # `env:` block with ECOSCOPE_WORKFLOWS__CONNECTIONS__<TYPE>__<NAME>__<FIELD> lines, each from
+        # this repo's GitHub secrets (Settings → Secrets and variables → Actions). An `env:` with
+        # only comments under it makes the whole workflow file invalid.
         run: |
           chmod +x dev/pytest-cli.sh || true
           pixi run --manifest-path pixi.toml -e default bash dev/pytest-cli.sh ${{ needs.discover.outputs.workflow_id }} --all
